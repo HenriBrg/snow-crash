@@ -1,12 +1,15 @@
 * Introduction
 
----------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------
 
 * Entrée
 
     ssh level00@192.168.99.142 -p 4242
         level00
     chmod u+w .bashrc ; echo 'alias c="clear"' >> ~/.bashrc ; source .bashrc
+    
+    • Find ALL SUID Files : find . -perm /u=s,g=s
+
 
 * Scan du réseau avec nmap : sudo nmap -sV -O -A 192.168.99.142 -p-
 
@@ -52,7 +55,6 @@
 
 * Utilitaires
 
-export nomDeLaFaille="level01" ; mkdir $nomDeLaFaille ; mkdir $nomDeLaFaille/ressources ; touch $nomDeLaFaille/ressources/Main.md $nomDeLaFaille/flag
-VBoxManage startvm "darkly" --type headless
-
-
+export nomDeLaFaille="level01" ; mkdir $nomDeLaFaille ; mkdir $nomDeLaFaille/ressources ; touch $nomDeLaFaille/ressources/Main.md $nomDeLaFaille flag
+VBoxManage startvm "snowcrash" --type headless
+VBoxManage controlvm "snowcrash" poweroff soft
