@@ -46,6 +46,16 @@
 
     find . -perm -u=x                                   --> Find ALL Files where permissions for user is 'x'
 
+
+    strings /bin/getflag
+
+        0123456
+        You should not reverse this
+        Injection Linked lib detected exit..
+        Check flag.Here is your token :
+        You are root are you that dumb ?
+        Nope there is no token here for you sorry. Try again :)
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 * Utilitaires
