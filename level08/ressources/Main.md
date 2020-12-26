@@ -29,7 +29,7 @@ LEVEL 08
     strings level08
 
         %s [file to read]
-        token
+        token                     --> Potentiellement un des arguments passés à strstr()
         You may not access '%s'
         Unable to open %s
         Unable to read fd %d
@@ -60,8 +60,6 @@ LEVEL 08
         048490 <write@plt>
         call   8048430 <__stack_chk_fail@plt>
 
-
-
         Anormal le __stack_chk_fail
 
         https://stackoverflow.com/questions/38418114/why-is-stack-chk-fail-happening-in-my-code
@@ -87,9 +85,47 @@ LEVEL 08
     perl -e 'print "A"x1000' > /tmp/first ; ./level08 /tmp/first  | wc   # -> Output 1000
     perl -e 'print "A"x1050' > /tmp/first ; ./level08 /tmp/first  | wc   # -> Output 1024 et non 1050
 
+    ---------
+
+    Stop recherches BOF, enfin ne mène à rien car à priori l'objet __stack_chk_fail  traduit l'impossibilité d'exploit via BOF
+    Retour à l'idée initiale (skippée sans avoir testé, de fouiner dans les liens symboliques)
+
+    On note un comportement différent quand on passe le fichier token
+    Il open/read/write le contenu du fichier passé si celui-ci ne contient pas 'token' dans son nom
+
+        echo pwd > one
+        ./level08 /tmp/one
+        
+        ./level08 token
+        
+        ./level08 tokden
+
+    Sur le "strings level08", on voit "token", donc à priori c'est le strstr qui l'appelle, et comme il y a pas mal de condition/jump,
+    ça peut jusitifer les différences d'output
+
+    Comme en examinant le binaire on ne voit pas d'execv / system, on est quasi sûr que le fichier token contient le flag08
+
+    ./level08 token -> ne passe pas ofc
+
+    echo > one
+    ./level08 /tmp/one -> semble fonctionner mais est vide
+
+    On peut créer un liens symbolique du fichier token à un "fichier symbolique" dans /tmp
+    pour que l'exécutable prenne en fait bien le fichier token
+
+    ln -s $(pwd)/token /tmp/xxx
+    ./level08 /tmp/xxx
+
+    Top, ça fonctionne
+    Faille apparement bien connue (suid + symlink)
+
+    su flag08 quif5eloekouj29ke0vouxean
+    getflag
+    su level09 25749xKZ8L7DkSCwJkT9dyv6f 
+
+    Comme on a tjrs accès à tmp/, on peut créer
 
 
-* Solution
 
 
 
@@ -124,3 +160,8 @@ STRSTR :
      the first occurrence of needle is returned.
 
      char * strstr(const char *haystack, const char *needle);
+
+DOCS :
+
+    https://www.exploit-db.com/papers/13199
+    https://lwn.net/Articles/250468/
