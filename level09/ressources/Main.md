@@ -102,7 +102,7 @@ LEVEL 09
     ./level09 f3        --> f4
     ./level09 f3        --> f4
     ./level09 f3i       --> f4k
-
+    [...........]
 
     level09@SnowCrash:~$ hexdump -C token
     00000000  66 34 6b 6d 6d 36 70 7c  3d 82 7f 70 82 6e 83 82  |f4kmm6p|=..p.n..|

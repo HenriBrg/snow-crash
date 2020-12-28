@@ -65,3 +65,13 @@ export nomDeLaFaille="level01" ; mkdir $nomDeLaFaille ; mkdir $nomDeLaFaille/res
 VBoxManage startvm "snowcrash" --type headless
 VBoxManage controlvm "snowcrash" poweroff soft
 chmod u+w .bashrc ; echo 'alias c="clear"' >> ~/.bashrc ; source .bashrc
+
+* VM Setup
+
+Storage : Controller IDE : Assign ISO
+
+Network  > Bridge Adaptater
+         > Advanced > Promiscuous : Allow All (Wireshark)
+
+Wireshark : Filter on ip.src == <vm-ip>
+

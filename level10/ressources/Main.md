@@ -46,7 +46,7 @@ LEVEL 10
     8048805:	e8 06 fe ff ff       	call   8048610 <connect@plt>
     804881f:	e8 fc fc ff ff       	call   8048520 <printf@plt>
     804882b:	e8 60 fd ff ff       	call   8048590 <exit@plt>
-    8048847:	e8 74 fd ff ff       	call   80485c0 <write@plt>
+    8048847:	e8 74 fd ff ff       	call   80485c0 <write@plt>          --> Ici que le token peut passer
     8048861:	e8 ba fc ff ff       	call   8048520 <printf@plt>
     804886d:	e8 1e fd ff ff       	call   8048590 <exit@plt>
     804887a:	e8 a1 fc ff ff       	call   8048520 <printf@plt>
@@ -59,22 +59,34 @@ LEVEL 10
     80488f4:	e8 77 fc ff ff       	call   8048570 <strerror@plt>
     8048905:	e8 16 fc ff ff       	call   8048520 <printf@plt>
     8048911:	e8 7a fc ff ff       	call   8048590 <exit@plt>
-    804892d:	e8 8e fc ff ff       	call   80485c0 <write@plt>
+    804892d:	e8 8e fc ff ff       	call   80485c0 <write@plt>          --> Ici que le token peut passer
     8048939:	e8 22 fc ff ff       	call   8048560 <puts@plt>
     8048950:	e8 cb fb ff ff       	call   8048520 <printf@plt>
     8048965:	e8 d6 fb ff ff       	call   8048540 <__stack_chk_fail@plt>
 
-
     1er constat : connect port 6969 de l'hote donné en string (second arg)
+
+    fflush : fflush() is typically used for output stream only. Its purpose is to clear (or flush) the output buffer and move
+    the buffered data to console (in case of stdout) or disk (in case of file output stream). Below is its syntax.
     
     
     echo Hello > /tmp/x
-    ./level10 127.0.0.1 /tmp/x
-        
-        You don't have access to 127.0.0.1
+    ./level10 /tmp/x 127.0.0.1
+        Connecting to 127.0.0.1:6969 .. Unable to connect to host 127.0.0.1
     
-    Host only -> bridge or nat
 
+    Inside VM : 
+
+        ! Setup VM Bridge & Promiscous ALL
+        python -m SimpleHTTPServer 6969
+        Wireshark en0 + Filtre ip.src == ipvm
+        ./level10 /tmp/x 192.168.1.23
+
+
+    Inside Host : 
+        ifconfig
+
+    
 
 
 * Solution
