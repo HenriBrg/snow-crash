@@ -34,7 +34,6 @@ LEVEL 05
     ll
     -rwxr-x---+ 1 flag05  flag05      94 Mar  5  2016 openarenaserver*
 
-    cat openarenaserver         --> Pourquoi arrive-t-on a le cat en tant qu'user level05 vu les droits ?
         
         #!/bin/sh
         for i in /opt/openarenaserver/* ; do

@@ -116,7 +116,7 @@ LEVEL 10
     
     3. nc -lk 6969
     
-    Le problème ici est que la race condition n'est "s'ouvre" jamais car access ne fait pas d'erreur à proprement parlé, enfin ses prédictions sont juste disons
+    Le problème ici est que la race condition ne "s'ouvre" jamais car access ne fait pas d'erreur à proprement parlé, enfin ses prédictions d'access sont juste disons
     Donc il faut ajouter de quoi "tromper" access
 
     4. 

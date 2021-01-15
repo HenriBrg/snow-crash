@@ -70,8 +70,6 @@ LEVEL 03
     Le programme level 03 est own par flag03, donc il peut call getflag
     Dedans, on a un call 'echo' depuis /usr/bin/env
     
-    /usr/bin/env echo HelloTest
-
     echo $PATH : /usr/local/sbin:/usr/local/bin:/usr/sbin:      /usr/bin  <ici>    :/sbin:/bin:/usr/games
     On overwrite l'emplacement, avec getflag
     whereis getflag --> /bin/getflag

@@ -105,7 +105,6 @@ LEVEL 08
 
     Comme en examinant le binaire on ne voit pas d'execv / system, on est quasi sûr que le fichier token contient le flag08
 
-    ./level08 token -> ne passe pas ofc
 
     echo > one
     ./level08 /tmp/one -> semble fonctionner mais est vide

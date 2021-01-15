@@ -32,8 +32,6 @@ LEVEL 09
     0000000: 6634 6b6d 6d36 707c 3d82 7f70 826e 8382  f4kmm6p|=..p.n..
     0000010: 4442 8344 757b 7f8c 890a                 DB.Du{....
 
-    ptrace = puts("You should not reverse this"You should not reverse this
-
     Le binaire ne semble pas open en tant que fichier l'argument passé, simplement le manipule comme une chaine de caractère random
 
     level09@SnowCrash:~$ objdump -d level09 | awk -F"\n" -v RS="\n\n" '$1 ~ /<main>/' | grep call
@@ -65,7 +63,6 @@ LEVEL 09
        process (the "tracee"), and examine and change the tracee's
        memory and registers.  It is primarily used to implement
        breakpoint debugging and system call tracing.
-
 
     Pas de piste en particulier, essayons de capter ce que fais le programme en testant à fond
     
