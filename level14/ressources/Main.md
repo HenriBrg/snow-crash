@@ -13,7 +13,7 @@ LEVEL 14 - The Boss
 
     CF. Explication Assembleur : disassGetFlag.s
 
-    En manipulant les registres (btw, à demander feedback aux correcteurs si c'est tjrs free de manipuler les registres xD, ça parait surprenant, idem level13)
+    En manipulant les registres (btw, à demander feedback aux correcteurs si c'est tjrs free de manipuler les registres, ça parait surprenant, idem level13)
 
     gdb /bin/getflag
     b main
@@ -21,10 +21,10 @@ LEVEL 14 - The Boss
         ni 10
         x/i $pc (check current command)
         info rs
-    
-    1er stop : ptrace qui nous fait sortir car il ret -1, on modifie eax avant le jump
 
-    set $eax=0x0
+    ni
+    1er stop : ptrace qui nous fait sortir car il ret -1, on modifie eax avant le jump
+    set $eax=0x0 
 
     ni jusqu'à getuid
     ou alors : b getuid (on va jump DANS getuid)
